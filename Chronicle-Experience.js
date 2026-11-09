@@ -61,7 +61,7 @@
     const light = setting === 'auto' ? (eventLight[events[current].title] || 'unknown') : setting;
     el('map-shade').dataset.light = light;
     const label = light === 'unknown' ? 'Time of day not stated for this event; the map is shown in neutral light.' : setting === 'auto' ? 'Illustrative light: ' + (light === 'dawn' ? 'dawn' : light === 'day' ? 'daytime' : 'night') + '.' : 'Lighting set to ' + (light === 'day' ? 'daylight' : 'night') + '.';
-    el('map-light-status').textContent = label;
+    el('map-light-status').textContent = label + ' The colours are illustrative, not a weather report.';
   }
   function showEvent(index) {
     current = Math.max(0, Math.min(events.length - 1, index));
