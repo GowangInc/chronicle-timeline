@@ -257,6 +257,8 @@
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.9;
     var canvas = renderer.domElement;
     canvas.style.display = 'block';
     canvas.style.width = '100%';
@@ -318,19 +320,35 @@
     }
 
     /* ---------------- materials ---------------- */
-    function lambert(params) { return track(new THREE.MeshLambertMaterial(params)); }
+    function lambert(params) {
+      var material = new THREE.MeshLambertMaterial(params);
+      material.color.convertSRGBToLinear();
+      return track(material);
+    }
     var matGround = lambert({ map: repeatTex('ground', 14, 9) });
     var matWater = track(new THREE.MeshPhongMaterial({
       map: repeatTex('water', 10, 3), transparent: true, opacity: 0.94,
       shininess: 70, specular: 0x336677
     }));
-    var matWall = lambert({ map: repeatTex('wall', 2, 1.4) });
+    var matWall = lambert({ map: repeatTex('wood', 3, 4), color: 0xe0d6bb });
     var matWallWarm = lambert({ map: repeatTex('wall', 2, 1.4), color: 0xf2d9ae });
     var matWallCool = lambert({ map: repeatTex('wall', 2, 1.4), color: 0xd8e2d2 });
     var matWallYellow = lambert({ map: repeatTex('wall', 2, 1.4), color: 0xe8c95e });
     var matBrick = lambert({ map: repeatTex('brick', 2, 1.6) });
     var matRoof = lambert({ map: repeatTex('roof', 3, 2) });
-    var matRoofPalm = lambert({ map: repeatTex('roof', 3, 2), color: 0xb09a6a });
+    var matRoofPalm = lambert({ map: repeatTex('wood', 7, 3), color: 0xc6ac73 });
+    var tinCanvas = makeCanvas(128), tinCtx = tinCanvas.getContext('2d');
+    var tinGradient = tinCtx.createLinearGradient(0, 0, 16, 0);
+    tinGradient.addColorStop(0, '#697a77'); tinGradient.addColorStop(0.45, '#c1c9b8'); tinGradient.addColorStop(1, '#697a77');
+    for (var strip = 0; strip < 8; strip++) {
+      tinCtx.save(); tinCtx.translate(strip * 16, 0); tinCtx.fillStyle = tinGradient; tinCtx.fillRect(0, 0, 16, 128); tinCtx.restore();
+    }
+    var tinMap = track(new THREE.CanvasTexture(tinCanvas));
+    tinMap.wrapS = tinMap.wrapT = THREE.RepeatWrapping;
+    tinMap.encoding = THREE.sRGBEncoding;
+    tinMap.repeat.set(2, 2);
+    var matTin = track(new THREE.MeshPhongMaterial({ map: tinMap, color: 0xc3cbc3, shininess: 24, specular: 0x727c75 }));
+    var matTrim = lambert({ color: 0xe4d5b3 });
     var matWood = lambert({ map: repeatTex('wood', 2, 1) });
     var matWoodDark = lambert({ map: repeatTex('wood', 2, 1), color: 0x9a7a52 });
     var matStone = lambert({ color: 0xc9b896 });
@@ -339,8 +357,9 @@
     var matDoor = lambert({ map: repeatTex('wood', 1, 1), color: 0x6f4f33 });
     var matDoorTeal = lambert({ color: 0x2e6f6a });
     var matWindow = lambert({ color: 0x2b3a44 });
-    var matCanopy = lambert({ color: 0x5d7d3a });
-    var matCanopyLight = lambert({ color: 0x7a9a4a });
+    var matCanopy = lambert({ color: 0x3d7350 });
+    var matCanopyLight = lambert({ color: 0x6d9051 });
+    var matFrond = lambert({ color: 0x4a8256, side: THREE.DoubleSide });
     var matTrunk = lambert({ color: 0x7a5c3c });
     var matCanvasCream = lambert({ color: 0xe8dcc0 });
     var matCanvasRed = lambert({ color: 0xa8503c });
@@ -390,20 +409,59 @@
       return mesh;
     }
     function addGable(parent, w, h, d, mat, x, y, z, ridgeAlongX) {
+      var group = new THREE.Group();
+      group.position.set(x, y, z);
+      if (ridgeAlongX) group.rotation.y = Math.PI / 2;
       var mesh = new THREE.Mesh(prismGeo(w, h, d), mat);
-      mesh.position.set(x, y, z);
-      if (ridgeAlongX) mesh.rotation.y = Math.PI / 2;
-      mesh.castShadow = true;
-      parent.add(mesh);
-      return mesh;
+      mesh.castShadow = mesh.receiveShadow = true;
+      group.add(mesh);
+      addBox(group, 0.18, 0.2, d + 0.2, matWoodDark, -w / 2, 0, 0);
+      addBox(group, 0.18, 0.2, d + 0.2, matWoodDark, w / 2, 0, 0);
+      addBox(group, 0.18, 0.15, d + 0.2, mat, 0, h + 0.03, 0);
+      if (mat === matTin) {
+        var slope = Math.hypot(w / 2, h), angle = Math.atan2(h, w / 2), count = Math.ceil(d / 0.65);
+        var ribs = new THREE.InstancedMesh(boxGeo(slope, 0.08, 0.09), matTin, count * 2);
+        var dummy = new THREE.Object3D();
+        for (var i = 0; i < count * 2; i++) {
+          var side = i % 2 ? 1 : -1;
+          dummy.position.set(side * w / 4, h / 2 + 0.05, -d / 2 + (Math.floor(i / 2) + 0.5) * d / count);
+          dummy.rotation.z = -side * angle;
+          dummy.updateMatrix(); ribs.setMatrixAt(i, dummy.matrix);
+        }
+        ribs.castShadow = true; group.add(ribs);
+      } else if (mat === matRoofPalm) {
+        var pitch = Math.atan2(h, w / 2), span = Math.hypot(w / 2, h);
+        for (var row = 0; row < 7; row++) {
+          var t = (row + 0.5) / 7;
+          [-1, 1].forEach(function (side) {
+            var layer = addBox(group, span / 7 + 0.12, 0.1, d + 0.12, matRoofPalm, side * w / 2 * (1 - t), h * t + 0.08, 0);
+            layer.rotation.z = -side * pitch;
+          });
+        }
+      }
+      parent.add(group);
+      return group;
     }
     function addDoor(parent, w, h, mat, x, y, z, ry) {
-      var door = addBox(parent, w, h, 0.22, mat, x, y, z, ry || 0);
-      return door;
+      var g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = ry || 0;
+      var door = addBox(g, w, h, 0.22, mat, 0, 0, 0);
+      addBox(g, 0.14, h + 0.2, 0.3, matTrim, -w / 2 - 0.05, 0, 0);
+      addBox(g, 0.14, h + 0.2, 0.3, matTrim, w / 2 + 0.05, 0, 0);
+      addBox(g, w + 0.4, 0.2, 0.35, matTrim, 0, h / 2 + 0.08, 0);
+      addBox(g, 0.09, 0.15, 0.12, matStone, w * 0.3, -0.1, 0.19);
+      parent.add(g); return door;
     }
     function addWindows(parent, count, mat, y, positions, ry) {
       for (var i = 0; i < count; i++) {
-        addBox(parent, 0.9, 1.1, 0.12, mat, positions[i][0], y, positions[i][1], ry || 0);
+        var g = new THREE.Group(); g.position.set(positions[i][0], y, positions[i][1]); g.rotation.y = ry || 0;
+        addBox(g, 1.1, 1.5, 0.12, mat, 0, 0, 0);
+        addBox(g, 1.28, 0.13, 0.2, matTrim, 0, 0.77, 0.04);
+        addBox(g, 1.4, 0.13, 0.35, matTrim, 0, -0.79, 0.1);
+        addBox(g, 0.07, 1.5, 0.16, matTrim, 0, 0, 0.08);
+        addBox(g, 1.1, 0.07, 0.16, matTrim, 0, 0, 0.08);
+        addBox(g, 0.34, 1.5, 0.15, matDoorTeal, -0.77, 0, 0.05);
+        addBox(g, 0.34, 1.5, 0.15, matDoorTeal, 0.77, 0, 0.05);
+        parent.add(g);
       }
     }
 
@@ -454,23 +512,33 @@
 
     /* ---------------- foliage helpers ---------------- */
     var trunkGeo = cylGeo(0.16, 0.26, 2.4, 6);
-    var canopyGeo = track(new THREE.IcosahedronGeometry(1.7, 0));
+    var canopyGeo = track(new THREE.IcosahedronGeometry(1.7, 1));
     function addTree(x, z, scale, mat) {
       var g = new THREE.Group();
       var trunk = new THREE.Mesh(trunkGeo, matTrunk);
       trunk.position.y = 1.2;
       trunk.castShadow = true;
-      var canopy = new THREE.Mesh(canopyGeo, mat || matCanopy);
-      canopy.position.y = 3.2;
-      canopy.castShadow = true;
-      g.add(trunk); g.add(canopy);
+      g.add(trunk);
+      [[0, 3.8, 0, 1], [-1.1, 3, 0.25, 0.85], [1, 3.2, 0.4, 0.8], [0.1, 3.1, -1, 0.85]].forEach(function (part, index) {
+        var crown = new THREE.Mesh(canopyGeo, index % 2 ? matCanopy : (mat || matCanopyLight));
+        crown.position.set(part[0], part[1], part[2]);
+        crown.scale.set(1.1 * part[3], 0.62 * part[3], part[3]);
+        crown.castShadow = true; g.add(crown);
+      });
       g.scale.setScalar(scale || 1);
       g.position.set(x, 0, z);
       town.add(g);
       return g;
     }
     var palmTrunkGeo = cylGeo(0.14, 0.24, 4.6, 6);
-    var frondGeo = track(new THREE.BoxGeometry(2.6, 0.07, 0.6));
+    var frondGeo = track(new THREE.BufferGeometry()), frondVertices = [], frondIndices = [];
+    for (var segment = 0; segment <= 12; segment++) {
+      var t = segment / 12, width = Math.sin(Math.PI * t) * 0.43;
+      frondVertices.push(t * 3.4, Math.sin(t * Math.PI) * 0.6 - t * t * 0.9, -width, t * 3.4, Math.sin(t * Math.PI) * 0.6 - t * t * 0.9, width);
+      if (segment < 12) { var v = segment * 2; frondIndices.push(v, v + 1, v + 2, v + 1, v + 3, v + 2); }
+    }
+    frondGeo.setAttribute('position', new THREE.Float32BufferAttribute(frondVertices, 3));
+    frondGeo.setIndex(frondIndices); frondGeo.computeVertexNormals();
     function addPalm(x, z, ry) {
       var g = new THREE.Group();
       var trunk = new THREE.Mesh(palmTrunkGeo, matTrunk);
@@ -478,12 +546,11 @@
       trunk.rotation.z = 0.12;
       trunk.castShadow = true;
       g.add(trunk);
-      for (var i = 0; i < 6; i++) {
-        var frond = new THREE.Mesh(frondGeo, matCanopy);
-        var a = (i / 6) * Math.PI * 2;
-        frond.position.set(Math.cos(a) * 1.1, 4.6, Math.sin(a) * 1.1);
+      for (var i = 0; i < 8; i++) {
+        var frond = new THREE.Mesh(frondGeo, matFrond);
+        var a = (i / 8) * Math.PI * 2;
+        frond.position.set(-0.25, 4.6, 0);
         frond.rotation.y = -a;
-        frond.rotation.z = -0.35;
         frond.castShadow = true;
         g.add(frond);
       }
@@ -506,14 +573,17 @@
       if (!front || !rear) return;
       var cx = (front.x + rear.x) / 2;
       var cz = (front.z + rear.z) / 2;
-      var w = 12.6, d = Math.abs(front.z - rear.z) + 3.4, h = 7.6;
+      var w = 12.6, d = Math.abs(front.z - rear.z), h = 7.6;
       var g = new THREE.Group();
       addBox(g, w, h, d, matWall, 0, h / 2, 0);
-      addGable(g, w + 1.4, 3.1, d + 1.4, matRoof, 0, h, 0, false);
+      addGable(g, w + 1.4, 3.1, d + 1.4, matTin, 0, h, 0, false);
+      addBox(g, 7.8, 0.22, 1.8, matWoodDark, 0, 4.45, d / 2 + 0.8);
+      addBox(g, 8, 0.12, 0.12, matWoodDark, 0, 5.55, d / 2 + 1.65);
+      for (var rail = 0; rail < 11; rail++) addBox(g, 0.08, 1.05, 0.08, matTrim, -3.7 + rail * 0.74, 5, d / 2 + 1.65);
       // Front ("Fatal") door on the square side, at the front-door coordinate.
-      addDoor(g, 2.4, 3.4, matDoor, front.x - cx, 1.7, front.z - cz);
+      addDoor(g, 2.4, 3.4, matDoor, front.x - cx, 1.7, d / 2 + 0.13);
       // Rear door, built a little higher so a horse could enter (p. 8).
-      addDoor(g, 2.2, 3.0, matWoodDark, rear.x - cx, 2.0, rear.z - cz);
+      addDoor(g, 2.2, 3.0, matWoodDark, rear.x - cx, 2.0, -d / 2 - 0.13, Math.PI);
       addWindows(g, 3, matWindow, 5.4, [[-w / 2 - 0.06, -d / 4], [-w / 2 - 0.06, 0], [-w / 2 - 0.06, d / 4]], Math.PI / 2);
       addWindows(g, 3, matWindow, 5.4, [[w / 2 + 0.06, -d / 4], [w / 2 + 0.06, 0], [w / 2 + 0.06, d / 4]], Math.PI / 2);
       addWindows(g, 2, matWindow, 5.4, [[-2.6, d / 2 + 0.06], [2.6, d / 2 + 0.06]]);
@@ -566,6 +636,14 @@
       plaza.position.set(p.x, 0.15, p.z);
       plaza.receiveShadow = true;
       town.add(plaza);
+      var pavers = new THREE.InstancedMesh(boxGeo(2.35, 0.035, 1.5), matStone, 180);
+      var paverTransform = new THREE.Object3D(), paverColor = new THREE.Color();
+      for (var paving = 0; paving < 180; paving++) {
+        paverTransform.position.set(p.x - 17.5 + (paving % 15) * 2.45, 0.325, p.z - 8.8 + Math.floor(paving / 15) * 1.6);
+        paverTransform.updateMatrix(); pavers.setMatrixAt(paving, paverTransform.matrix);
+        paverColor.setHSL(0.105, 0.18, 0.59 + (paving % 7) * 0.018); pavers.setColorAt(paving, paverColor);
+      }
+      pavers.receiveShadow = true; town.add(pavers);
       // Almond trees along one side (p. 9).
       for (var i = 0; i < 6; i++) {
         addTree(p.x - 17 + i * 6.8, p.z + 11.5, 1 + (i % 2) * 0.15, i % 2 ? matCanopy : matCanopyLight);
@@ -782,6 +860,28 @@
       town.add(g);
       addTree(p.x - 8, p.z - 6, 0.95, matCanopy);
     })();
+    (function landscape() {
+      var routes = [['market', 'shop'], ['square', 'yamil'], ['yamil', 'club'], ['club', 'flora'], ['flora', 'vicario'], ['rear', 'dock'], ['dock', 'xius'], ['lanao', 'dock'], ['church', 'maria']];
+      routes.forEach(function (route) {
+        var a = pos(route[0]), b = pos(route[1]); if (!a || !b) return;
+        var dx = b.x - a.x, dz = b.z - a.z, length = Math.hypot(dx, dz);
+        var path = addBox(town, 2.6, 0.035, length, matStreet, (a.x + b.x) / 2, 0.055, (a.z + b.z) / 2);
+        path.rotation.y = Math.atan2(dx, dz); path.castShadow = false;
+      });
+      var rng = mulberry32(7681), patchMat = track(new THREE.MeshLambertMaterial({ color: 0x859160, transparent: true, opacity: 0.32, depthWrite: false }));
+      var patches = new THREE.InstancedMesh(track(new THREE.CircleGeometry(1, 18)), patchMat, 70);
+      var transform = new THREE.Object3D();
+      for (var i = 0; i < 70; i++) {
+        var x = (rng() - 0.5) * 190, z = -18 + rng() * 90;
+        transform.position.set(x, 0.025, z); transform.rotation.set(-Math.PI / 2, 0, 0); transform.scale.set(3 + rng() * 6, 1.5 + rng() * 3, 1);
+        transform.updateMatrix(); patches.setMatrixAt(i, transform.matrix);
+      }
+      town.add(patches);
+      [[-91,-15],[-87,8],[-88,35],[-77,51],[-54,62],[-28,64],[-2,63],[20,65],[71,45],[88,27],[78,2],[61,-15]].forEach(function (p, index) {
+        addTree(p[0], p[1], 0.9 + index % 3 * 0.15, index % 2 ? matCanopy : matCanopyLight);
+      });
+      [[-85,-21],[-65,-21],[-35,-21],[8,-21],[74,-21]].forEach(function (p, index) { addPalm(p[0], p[1], index * 0.7); });
+    })();
 
     /* ---------------- street lamps around the square ---------------- */
     var lampHeadMat = track(new THREE.MeshLambertMaterial({ color: 0x8a7a52, emissive: 0xffb765, emissiveIntensity: 0 }));
@@ -810,7 +910,9 @@
     var dir = new THREE.DirectionalLight(0xfff2dc, 1.1);
     dir.position.set(70, 110, 40);
     dir.castShadow = true;
-    dir.shadow.mapSize.set(1024, 1024);
+    dir.shadow.mapSize.set(2048, 2048);
+    dir.shadow.bias = -0.00015;
+    dir.shadow.normalBias = 0.04;
     dir.shadow.camera.left = -110;
     dir.shadow.camera.right = 110;
     dir.shadow.camera.top = 110;
@@ -1049,7 +1151,7 @@
       ids = (ids || []).filter(function (id) { return markers[id]; });
       // An empty selection clears highlighting but never invents a location,
       // so the camera stays exactly where the reader left it.
-      if (!ids.length) { setSelection([]); return; }
+      if (!ids.length) { setSelection([]); cancelFlightSnapGoal(); return; }
       setSelection(ids);
       var cx = 0, cz = 0, radius = 0;
       ids.forEach(function (id) {
@@ -1394,7 +1496,7 @@
     pushLightToScene();
     applyCamera();
     rafId = requestAnimationFrame(frame);
-    setStatus('3D town ready. Drag to look around; use the buttons, arrow keys, plus, minus, and R to explore.');
+    setStatus('3D view ready.');
     window.__chronicleTown3DDebug = api;
     return api;
   }

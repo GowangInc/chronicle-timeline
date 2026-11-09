@@ -6,7 +6,7 @@
   const byId = new Map(places.map(place => [place.id, place]));
   const byTitle = new Map(events.map((event, index) => [event.title, index]));
   const slider = el('map-time');
-  let current = 0, playing = false, timer, selectedPlace = null, town3d = null;
+  let current = 0, playing = false, timer, selectedPlace = null, town3d = null, syncingTimeline = false;
   slider.max = events.length;
   el('map-event-total').textContent = events.length;
 
@@ -73,11 +73,41 @@
     const light = setting === 'auto' ? (eventLight[events[current].title] || 'unknown') : setting;
     el('map-shade').dataset.light = light;
     town3d?.setLight(light);
-    const label = light === 'unknown' ? 'Time of day not stated for this event; the map is shown in neutral light.' : setting === 'auto' ? 'Illustrative light: ' + (light === 'dawn' ? 'dawn' : light === 'day' ? 'daytime' : 'night') + '.' : 'Lighting set to ' + (light === 'day' ? 'daylight' : 'night') + '.';
-    el('map-light-status').textContent = label + ' The colours are illustrative, not a weather report.';
+    el('map-light-status').textContent = light === 'unknown' ? 'Time of day: unspecified.' : 'Lighting: ' + (light === 'dawn' ? 'dawn' : light === 'day' ? 'daylight' : 'night') + '.';
   }
-  function showEvent(index) {
+  function scrollMapTo(ids) {
+    if (el('map-view-2d').hidden || !ids.length) return;
+    const pin = [...el('map-pins').children].find(node => node.dataset.id === ids[0]);
+    if (!pin) return;
+    const frame = document.querySelector('.map-canvas');
+    const left = frame.scrollLeft + pin.getBoundingClientRect().left - frame.getBoundingClientRect().left - frame.clientWidth / 2;
+    frame.scrollTo({left: Math.max(0, left), behavior: motionEnabled ? 'smooth' : 'instant'});
+  }
+  function followTimeline(index) {
+    if (selected === index && visible.includes(index)) return;
+    syncingTimeline = true;
+    try {
+      if (!visible.includes(index)) {
+        search.value = ''; chapter.value = ''; selected = index; render();
+      } else {
+        selectEvent(index);
+      }
+    } finally { syncingTimeline = false; }
+  }
+  function switchView(view) {
+    const is3d = view === '3d';
+    el('map-view-3d').hidden = !is3d;
+    el('map-view-2d').hidden = is3d;
+    el('view-3d').setAttribute('aria-pressed', String(is3d));
+    el('view-2d').setAttribute('aria-pressed', String(!is3d));
+    if (is3d) town3d?.resize();
+    else scrollMapTo(eventPlaces[events[current].title] || []);
+  }
+  el('view-3d').addEventListener('click', () => switchView('3d'));
+  el('view-2d').addEventListener('click', () => switchView('2d'));
+  function showEvent(index, syncTimeline = true) {
     current = Math.max(0, Math.min(events.length - 1, index));
+    if (syncTimeline) followTimeline(current);
     const event = events[current], ids = eventPlaces[event.title] || [];
     slider.value = current + 1;
     slider.setAttribute('aria-valuetext', 'Event ' + (current + 1) + ' of ' + events.length + ': ' + event.title + ', ' + event.when);
@@ -90,6 +120,7 @@
     document.querySelectorAll('.map-pin').forEach(pin => pin.dataset.scene = String(ids.includes(pin.dataset.id)));
     showPlace(ids.length ? byId.get(ids[0]) : null, false);
     town3d?.focus(ids, motionEnabled);
+    scrollMapTo(ids);
     updateLight();
   }
   slider.addEventListener('input', () => {pause(); showEvent(Number(slider.value) - 1)});
@@ -103,7 +134,7 @@
   el('map-delay').addEventListener('change', schedule);
   el('map-light').addEventListener('change', updateLight);
   el('map-open-event').addEventListener('click', () => openTimeline(events[current].title));
-  document.addEventListener('chronicle-timeline-select', event => { pause(); showEvent(event.detail.index); });
+  document.addEventListener('chronicle-timeline-select', event => { if (!syncingTimeline) { pause(); showEvent(event.detail.index, false); } });
   document.addEventListener('visibilitychange', () => {if (document.hidden) pause()});
   showEvent(0);
 

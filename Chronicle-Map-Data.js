@@ -43,7 +43,7 @@ window.CHRONICLE_PLACES = [
     id: 'square',
     name: 'The main square',
     x: 540, y: 505,
-    description: 'The square was paved up to the church steps and still lay covered with bottles and wedding debris that dawn, with almond trees along one side (p. 9). The milk shop stood on one side and Plácida Linero’s house across the way, and in the last minutes the crowd stationed itself there “the way they did on parade days” to watch (pp. 9, 46). Its dimensions and surrounding streets on this map are illustrative.',
+    description: 'The square was paved up to the church steps and still lay covered with bottles and wedding debris that dawn, with almond trees along one side (p. 9). The milk shop stood on one side and Plácida Linero’s house across the way, and in the last minutes the crowd stationed itself there “the way they did on parade days” to watch (pp. 9, 46).',
     page: 9,
     events: ['Bayardo notices Angela','A priest forgets','Warnings in the square','The crowd calls out']
   },
@@ -51,7 +51,7 @@ window.CHRONICLE_PLACES = [
     id: 'dock',
     name: 'River dock',
     x: 980, y: 250,
-    description: 'At the loading pier, the bishop’s boat passed without stopping while the crowd held up roosters (pp. 9–10); Bayardo had arrived on the weekly boat the previous August (p. 12). Near the old dock, the narrator’s aunt Wenefrida saw Santiago on his final walk (p. 47). The new and old docks are shown together at one illustrative point.',
+    description: 'At the loading pier, the bishop’s boat passed without stopping while the crowd held up roosters (pp. 9–10); Bayardo had arrived on the weekly boat the previous August (p. 12). Near the old dock, the narrator’s aunt Wenefrida saw Santiago on his final walk (p. 47). The map uses one marker for the old and new docks.',
     page: 9,
     events: ['A stranger arrives','The bishop passes','Breakfast plans','Santiago’s final walk']
   },
@@ -59,7 +59,7 @@ window.CHRONICLE_PLACES = [
     id: 'lanao',
     name: 'Lanao family house',
     x: 850, y: 400,
-    description: 'The Lanao house stood next door to the Nasar house, on the side toward the old dock; Poncho Lanao, his wife and their five children were sitting down to breakfast when Santiago, carrying his intestines, walked through it to reach his own rear door (pp. 47–48). Its adjacency to the Nasar house is textual; its exact position here is illustrative.',
+    description: 'The Lanao house stood next door to the Nasar house, on the side toward the old dock; Poncho Lanao, his wife and their five children were sitting down to breakfast when Santiago, carrying his intestines, walked through it to reach his own rear door (pp. 47–48).',
     page: 47,
     events: ['Santiago’s final walk']
   },
@@ -67,7 +67,7 @@ window.CHRONICLE_PLACES = [
     id: 'flora',
     name: 'Flora Miguel’s house',
     x: 925, y: 600,
-    description: 'The house of Santiago’s fiancée was kept locked until late by Nahir Miguel’s household of more than fourteen relatives (pp. 44–45). Santiago entered by the main door at 6:45 a.m., received back the chest of his letters from Flora, and left minutes later after Nahir offered him shelter or a rifle (p. 45). The text says only that it stood around the corner from where Cristo last saw him; its map position is illustrative.',
+    description: 'The house of Santiago’s fiancée was kept locked until late by Nahir Miguel’s household of more than fourteen relatives (pp. 44–45). Santiago entered by the main door at 6:45 a.m., received back the chest of his letters from Flora, and left minutes later after Nahir offered him shelter or a rifle (p. 45). It stood around the corner from where Cristo last saw him.',
     page: 44,
     events: ['Flora returns Santiago’s letters','Nahir gives a direct warning']
   },
@@ -75,7 +75,7 @@ window.CHRONICLE_PLACES = [
     id: 'market',
     name: 'Meat market',
     x: 255, y: 680,
-    description: 'At the meat market the twins sharpened their knives on the grindstone about 3:20 a.m. and announced the killing in front of the early butchers — twenty-two people later declared they had heard everything (p. 22). The market also held the lunch stands by the old harbor and the town’s only large freezer, which was out of order when the mayor wanted to refrigerate the body (pp. 28, 30). Its position on this map is illustrative.',
+    description: 'At the meat market the twins sharpened their knives on the grindstone about 3:20 a.m. and announced the killing in front of the early butchers — twenty-two people later declared they had heard everything (p. 22). The market also held the lunch stands by the old harbor and the town’s only large freezer, which was out of order when the mayor wanted to refrigerate the body (pp. 28, 30).',
     page: 22,
     events: ['The brothers prepare','A second set of knives']
   },
@@ -83,7 +83,7 @@ window.CHRONICLE_PLACES = [
     id: 'vicario',
     name: 'Vicario family house',
     x: 1050, y: 690,
-    description: 'A modest house with brick walls, a palm roof, a terrace full of flowerpots, hens and fruit trees in the yard, and the twins’ pigsty with its sacrificial stone at the rear (p. 18). Painted yellow and repaired for the wedding, it is where Bayardo returned Angela before 3 a.m., where Pura beat her, and where Angela named Santiago Nasar in the dining room (pp. 18, 20–21). Its position here is illustrative.',
+    description: 'A modest house with brick walls, a palm roof, a terrace full of flowerpots, hens and fruit trees in the yard, and the twins’ pigsty with its sacrificial stone at the rear (p. 18). Painted yellow and repaired for the wedding, it is where Bayardo returned Angela before 3 a.m., where Pura beat her, and where Angela named Santiago Nasar in the dining room (pp. 18, 20–21).',
     page: 18,
     events: ['A family agrees for Angela','Angela’s private fear','Angela waits for Bayardo','A public celebration','Bayardo returns Angela','Pura beats her daughter','Angela names Santiago','The brothers prepare','A second set of knives']
   },
@@ -91,7 +91,7 @@ window.CHRONICLE_PLACES = [
     id: 'yamil',
     name: 'Yamil Shaium’s store',
     x: 570, y: 625,
-    description: 'Yamil Shaium’s dry goods store stood near the corner of the square; Yamil, Ibrahim Nasar’s old card partner and the family’s hereditary counsellor, waited at its door to warn Santiago and detained Cristo Bedoya there to ask about the rumour (p. 41). In the final minutes he shouted for Santiago to come in and went looking for cartridges for his hunting gun (pp. 45–46). Its position is illustrative.',
+    description: 'Yamil Shaium’s dry goods store stood near the corner of the square; Yamil, Ibrahim Nasar’s old card partner and the family’s hereditary counsellor, waited at its door to warn Santiago and detained Cristo Bedoya there to ask about the rumour (p. 41). In the final minutes he shouted for Santiago to come in and went looking for cartridges for his hunting gun (pp. 45–46).',
     page: 41,
     events: ['Warnings in the square','The crowd calls out']
   },
@@ -99,7 +99,7 @@ window.CHRONICLE_PLACES = [
     id: 'xius',
     name: 'Widower Xius’s house',
     x: 1170, y: 430,
-    description: 'The widower Xius’s farmhouse stood on a windswept hill, its terrace overlooking the marshes and, on clear days, the Caribbean horizon (p. 16). Bayardo bought it for ten thousand pesos in cash and carried Angela there after the wedding dance; the following Saturday the mayor’s patrol found Bayardo inside, unconscious among bottles (pp. 17, 20, 34). The hilltop setting is textual; the exact placement is illustrative.',
+    description: 'The widower Xius’s farmhouse stood on a windswept hill, its terrace overlooking the marshes and, on clear days, the Caribbean horizon (p. 16). Bayardo bought it for ten thousand pesos in cash and carried Angela there after the wedding dance; the following Saturday the mayor’s patrol found Bayardo inside, unconscious among bottles (pp. 17, 20, 34).',
     page: 16,
     events: ['The widower’s house','Bayardo is found','Bayardo’s family takes him away']
   },
@@ -107,7 +107,7 @@ window.CHRONICLE_PLACES = [
     id: 'club',
     name: 'Social club',
     x: 760, y: 650,
-    description: 'At the social club’s domino table Bayardo twice sat down with the widower Xius to negotiate for his house, returning with ten thousand pesos in bundled notes (pp. 16–17). It was also where Mayor Aponte stopped to confirm a dominoes engagement moments after promising Cristo Bedoya he would deal with the twins (p. 43). Its position is illustrative.',
+    description: 'At the social club’s domino table Bayardo twice sat down with the widower Xius to negotiate for his house, returning with ten thousand pesos in bundled notes (pp. 16–17). It was also where Mayor Aponte stopped to confirm a dominoes engagement moments after promising Cristo Bedoya he would deal with the twins (p. 43).',
     page: 16,
     events: ['The widower’s house','Cristo meets the mayor again']
   },
@@ -115,7 +115,7 @@ window.CHRONICLE_PLACES = [
     id: 'maria',
     name: 'María Alejandrina Cervantes’ house',
     x: 160, y: 445,
-    description: 'María Alejandrina Cervantes’s house has rooms for rent and a large dancing courtyard (p. 27). On the wedding night Santiago, the narrator, Cristo Bedoya, Luis Enrique and the Vicario twins drink and sing there together before the group separates (pp. 20, 27). Its position is illustrative.',
+    description: 'María Alejandrina Cervantes’s house has rooms for rent and a large dancing courtyard (p. 27). On the wedding night Santiago, the narrator, Cristo Bedoya, Luis Enrique and the Vicario twins drink and sing there together before the group separates (pp. 20, 27).',
     page: 27,
     events: ['The party continues']
   }
