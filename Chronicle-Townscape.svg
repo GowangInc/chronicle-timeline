@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 400" fill="none">
+<title>A river town before dawn</title><desc>An imagined Caribbean riverfront: tiled roofs, balconies, a church tower, almond branches and a passing paddle steamer. Atmospheric illustration, not a map.</desc>
+<defs>
+<linearGradient id="water" x1="750" y1="290" x2="750" y2="400" gradientUnits="userSpaceOnUse"><stop stop-color="#325356"/><stop offset="1" stop-color="#0b1518"/></linearGradient>
+<linearGradient id="stone" x1="1060" y1="80" x2="1240" y2="290" gradientUnits="userSpaceOnUse"><stop stop-color="#365052"/><stop offset="1" stop-color="#14272b"/></linearGradient>
+<pattern id="tile" width="20" height="9" patternUnits="userSpaceOnUse"><path d="M0 8H20M10 0V8" stroke="#a78d62" stroke-opacity=".25"/></pattern>
+<g id="palm"><path d="M0 0Q-12-53-2-118" stroke="#0c1c20" stroke-width="9"/><path d="M-2-118Q-53-160-75-113Q-38-128-2-118ZM-2-118Q-35-177-69-157Q-36-151-2-118ZM-2-118Q5-184 34-171Q9-150-2-118ZM-2-118Q52-169 74-130Q35-133-2-118ZM-2-118Q65-133 78-97Q41-121-2-118ZM-2-118Q-26-141-45-91Q-18-115-2-118Z" fill="#0c1c20"/></g>
+<g id="window"><path d="M0 22V6Q7-5 14 6V22Z" fill="#0b191c"/><path d="M3 21V7Q7 1 11 7V21" stroke="#c8a972" stroke-opacity=".45"/></g>
+<g id="branch"><path d="M0 0Q80-28 151-21M43-13L67-49M89-23L118-51M100-22L136 4" stroke="#0a191c" stroke-width="7"/><g fill="#0a191c"><ellipse cx="65" cy="-44" rx="26" ry="9" transform="rotate(-39 65 -44)"/><ellipse cx="120" cy="-48" rx="30" ry="11" transform="rotate(-30 120 -48)"/><ellipse cx="141" cy="4" rx="27" ry="11" transform="rotate(18 141 4)"/><ellipse cx="33" cy="-27" rx="26" ry="10" transform="rotate(25 33 -27)"/><ellipse cx="157" cy="-22" rx="29" ry="10" transform="rotate(-10 157 -22)"/></g></g>
+</defs>
+<path d="M0 246Q90 216 170 231T350 215T550 227T730 201T940 218T1110 200T1310 221T1500 205V400H0Z" fill="#294347" opacity=".5"/>
+<g fill="#1a3236"><path d="M0 214H56V184H114V213H170V174H247V220H290V190H354V213H416V179H480V225H540V195H612V225H692V185H751V214H819V177H902V221H971V191H1035V224H1128V182H1212V212H1301V170H1366V210H1445V179H1500V300H0Z"/></g>
+<path d="M0 295Q240 273 443 290T836 287T1189 292T1500 278V400H0Z" fill="url(#water)"/>
+<g fill="#112328" stroke="#887b5b" stroke-opacity=".38">
+<path d="M14 276V213H124V276ZM0 213L67 177L140 213Z"/><path d="M137 277V183H270V277ZM125 183L207 147L282 183Z"/><path d="M287 277V207H392V277ZM274 207L338 173L404 207Z"/><path d="M406 281V218H502V281ZM394 218L453 184L516 218Z"/>
+<path d="M805 283V226H902V283ZM791 226L854 189L917 226Z"/><path d="M921 282V196H1034V282ZM908 196L977 160L1047 196Z"/>
+</g>
+<g fill="url(#tile)"><path d="M0 213L67 177L140 213ZM125 183L207 147L282 183ZM274 207L338 173L404 207ZM394 218L453 184L516 218ZM791 226L854 189L917 226ZM908 196L977 160L1047 196Z"/></g>
+<g stroke="#b69b6a" stroke-opacity=".32"><path d="M15 218H123M138 189H269M139 230H268M142 240H265M146 230V254M165 230V254M184 230V254M203 230V254M222 230V254M241 230V254M262 230V254M135 255H271M409 223H501M922 204H1033"/></g>
+<g><use href="#window" x="35" y="229"/><use href="#window" x="86" y="229"/><use href="#window" x="158" y="198"/><use href="#window" x="198" y="198"/><use href="#window" x="236" y="198"/><use href="#window" x="312" y="225"/><use href="#window" x="362" y="225"/><use href="#window" x="434" y="235"/><use href="#window" x="470" y="235"/><use href="#window" x="826" y="240"/><use href="#window" x="870" y="240"/><use href="#window" x="944" y="218"/><use href="#window" x="997" y="218"/></g>
+<g fill="url(#stone)" stroke="#c8a972" stroke-opacity=".45"><path d="M1060 289V189L1146 134L1232 189V289Z"/><path d="M1130 169V84H1170V169Z"/><path d="M1122 84L1150 49L1178 84Z"/><path d="M1127 124H1173M1127 132H1173M1054 190H1238"/></g>
+<path d="M1150 51V25M1140 35H1160" stroke="#c8a972" stroke-opacity=".75" stroke-width="2"/>
+<path d="M1139 116V99Q1150 81 1161 99V116Z" fill="#0a191c"/><path d="M1146 106Q1144 97 1150 95Q1156 97 1154 106L1158 111H1142Z" fill="#b79961" opacity=".7"/>
+<circle cx="1147" cy="184" r="16" fill="#0b1d20" stroke="#9c8d62" stroke-opacity=".6"/><path d="M1134 184H1160M1147 171V197M1138 175L1156 193M1138 193L1156 175" stroke="#8d8059" stroke-opacity=".4"/>
+<path d="M1129 289V243Q1147 213 1165 243V289" fill="#0c1a1e" stroke="#9f8d63" stroke-opacity=".4"/>
+<path d="M1068 264H1108M1184 264H1224M1073 280H1220" stroke="#c8a972" stroke-opacity=".18"/>
+<g fill="#09181c"><path d="M0 281Q75 270 149 281T301 279T465 285T650 279T843 285T1010 278T1230 286T1500 275V307H0Z"/><path d="M1286 285V227H1384V285L1371 290H1293ZM1272 227L1337 185L1398 227Z"/></g>
+<g transform="translate(550 298)"><path d="M-52-14H166L139 4H-30Z" fill="#0b181c" stroke="#b69b6a" stroke-opacity=".5"/><path d="M-17-42H119V-14H-17Z" fill="#1b3438" stroke="#a48c61" stroke-opacity=".5"/><path d="M-29-45H133M-21-27H125" stroke="#c8a972" stroke-opacity=".65" stroke-width="2"/><path d="M10-44V-66H23V-44M80-44V-72H93V-44" fill="#0a191c" stroke="#a48c61" stroke-opacity=".5"/><path d="M-5-28V-42M16-28V-42M37-28V-42M58-28V-42M79-28V-42M100-28V-42" stroke="#c8a972" stroke-opacity=".6"/><circle cx="85" cy="-6" r="17" fill="#11262a" stroke="#a58c5e"/><path d="M68-6H102M85-23V11M73-18L97 6M73 6L97-18" stroke="#a58c5e" stroke-opacity=".65"/><path d="M18-70Q-2-85 15-94Q39-109 16-122M87-76Q69-96 94-107Q113-123 95-134" stroke="#a6b6a7" stroke-width="9" stroke-linecap="round" opacity=".09"/></g>
+<g stroke="#c8a972" stroke-opacity=".22"><path d="M483 319H650M529 327H741M564 335H656M423 342H585M810 320H1010M978 330H1198M1100 342H1308M100 324H341M198 339H391M36 354H254M681 360H837M1245 362H1470"/><path d="M1114 307H1183M1122 314H1173M1133 321H1169" stroke-opacity=".45"/></g>
+<use href="#palm" transform="translate(76 288) scale(.9)"/><use href="#palm" transform="translate(401 290) scale(.68)"/><use href="#palm" transform="translate(1297 291) scale(1.05)"/><use href="#palm" transform="translate(1436 289) scale(1.3)"/>
+<path d="M1499 400Q1448 330 1440 265Q1420 209 1357 172M1441 271Q1462 225 1499 215" stroke="#081518" stroke-width="19"/>
+<use href="#branch" transform="translate(1431 253) rotate(-155) scale(1.2)"/><use href="#branch" transform="translate(1400 210) rotate(-150)"/><use href="#branch" transform="translate(1458 236) rotate(-30) scale(1.2)"/>
+<path d="M0 366Q168 349 319 370T656 369T1032 371T1500 366V400H0Z" fill="#0b1518" opacity=".66"/>
+</svg>
