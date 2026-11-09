@@ -95,7 +95,7 @@ footer{border-top:1px solid #42595a;padding-top:24px;padding-bottom:35px;font-si
 <section id="explore" class="shell explore" aria-labelledby="explore-title">
 <div class="section-line"><div><p class="eyebrow">Memory · testimony · responsibility</p><h2 id="explore-title">Trace the chain of events</h2></div><p id="rail-help" class="timeline-hint">Select a numbered point, or swipe or scroll sideways. With a keyboard, use Tab to reach a point. Right Arrow moves to the next event; Left Arrow moves to the previous event. Choosing a group clears the search and chapter filters and jumps to its first event.</p></div>
 <div class="view-modes" role="group" aria-label="Timeline order"><button type="button" id="order-events" aria-pressed="true">Order of events</button><button type="button" id="order-book" aria-pressed="false">By cited passage</button></div><p class="section-intro" id="order-explanation">Follow the events in approximate chronological order.</p>
-<nav id="periods" class="periods" aria-label="Jump to a period"></nav>
+<nav id="periods" class="periods" aria-label="Jump to a group"></nav>
 <div class="filter-row"><label class="search-label" for="search">Find a person, place or idea<input id="search" type="search" placeholder="Search the chronicle…" autocomplete="off"></label><label for="chapter">Source chapter<select id="chapter"><option value="">All chapters</option><option value="1">Chapter 1</option><option value="2">Chapter 2</option><option value="3">Chapter 3</option><option value="4">Chapter 4</option><option value="5">Chapter 5</option></select></label><button id="reset" class="text-button" type="button">Clear filters</button></div>
 <div class="rail-frame"><div id="rail" class="rail" role="region" aria-label="Horizontal event timeline" aria-describedby="rail-help"><ol id="track" class="track"></ol></div></div>
 <div class="rail-caption"><p id="count" role="status" aria-live="polite"></p><p>Approximate sequence <span aria-hidden="true">—→</span></p></div>
@@ -297,7 +297,7 @@ events.forEach((e,index)=>{
 });
 updateMotion();render();
 </script>
-<script src="Chronicle-Map-Data.js?v=aa3e347779f2"></script>
+<script src="Chronicle-Map-Data.js?v=288a368b3b6f"></script>
 <script src="Chronicle-Experience.js?v=f63c12004434"></script>
 <script src="Chronicle-Characters.js?v=5a3c85cecb0f"></script>
 <script src="Chronicle-Relationships.js?v=8f9645efb3bd"></script>

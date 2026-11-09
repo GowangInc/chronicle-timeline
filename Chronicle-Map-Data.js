@@ -85,7 +85,7 @@ window.CHRONICLE_PLACES = [
     x: 1050, y: 690,
     description: 'A modest house with brick walls, a palm roof, a terrace full of flowerpots, hens and fruit trees in the yard, and the twins’ pigsty with its sacrificial stone at the rear (p. 18). Painted yellow and repaired for the wedding, it is where Bayardo returned Angela before 3 a.m., where Pura beat her, and where Angela named Santiago Nasar in the dining room (pp. 18, 20–21). Its position here is illustrative.',
     page: 18,
-    events: ['The music box','A family agrees for Angela','Angela’s private fear','Angela waits for Bayardo','A public celebration','Bayardo returns Angela','Pura beats her daughter','Angela names Santiago','The brothers prepare','A second set of knives']
+    events: ['A family agrees for Angela','Angela’s private fear','Angela waits for Bayardo','A public celebration','Bayardo returns Angela','Pura beats her daughter','Angela names Santiago','The brothers prepare','A second set of knives']
   },
   {
     id: 'yamil',
@@ -231,7 +231,7 @@ window.CHRONICLE_EVENT_PLACES = {
   'Victoria and Divina': [],
   'A stranger arrives': ['dock'],
   'Bayardo notices Angela': ['square'],
-  'The music box': ['vicario'],
+  'The music box': [],
   'A family agrees for Angela': ['vicario'],
   'The widower’s house': ['xius','club'],
   'Angela’s private fear': ['vicario'],
