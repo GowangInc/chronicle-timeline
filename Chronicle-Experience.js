@@ -6,7 +6,7 @@
   const byId = new Map(places.map(place => [place.id, place]));
   const byTitle = new Map(events.map((event, index) => [event.title, index]));
   const slider = el('map-time');
-  let current = 0, playing = false, timer, selectedPlace = null;
+  let current = 0, playing = false, timer, selectedPlace = null, town3d = null;
   slider.max = events.length;
   el('map-event-total').textContent = events.length;
 
@@ -25,7 +25,7 @@
       if (current === events.length - 1) pause(); else schedule();
     }, Number(el('map-delay').value));
   }
-  function showPlace(place) {
+  function showPlace(place, navigate = true) {
     selectedPlace = place?.id || null;
     el('place-number').textContent = place ? 'Place ' + String(places.indexOf(place) + 1).padStart(2, '0') : 'No mapped place';
     el('place-name').textContent = place ? place.name : 'Location not on this map';
@@ -39,6 +39,7 @@
     });
     if (!place || !place.events.length) {const p = document.createElement('p'); p.textContent = place ? 'No timeline event is linked to this place.' : 'Choose a numbered place to explore it.'; list.append(p)}
     document.querySelectorAll('.map-pin').forEach(pin => pin.setAttribute('aria-pressed', String(pin.dataset.id === selectedPlace)));
+    if (navigate && place) town3d?.focus([place.id], motionEnabled);
   }
   function openTimeline(title) {
     const index = byTitle.get(title);
@@ -56,10 +57,22 @@
     const item = document.createElement('button'); item.type = 'button'; item.textContent = (index + 1) + ' · ' + place.name;
     item.addEventListener('click', () => {pause(); showPlace(place)}); el('place-list-buttons').append(item);
   });
+  try {
+    if (!window.ChronicleTown3D) throw new Error('3D renderer unavailable');
+    town3d = window.ChronicleTown3D.create(el('town-3d'), {
+      places,
+      onPlace(id) { const place = byId.get(id); if (place) { pause(); showPlace(place); } }
+    });
+  } catch (error) {
+    el('town-3d').hidden = true;
+    el('town-3d-status').textContent = 'The 3D view could not start on this device. Use the illustrated map and place list below.';
+    console.warn('3D town unavailable:', error);
+  }
   function updateLight() {
     const setting = el('map-light').value;
     const light = setting === 'auto' ? (eventLight[events[current].title] || 'unknown') : setting;
     el('map-shade').dataset.light = light;
+    town3d?.setLight(light);
     const label = light === 'unknown' ? 'Time of day not stated for this event; the map is shown in neutral light.' : setting === 'auto' ? 'Illustrative light: ' + (light === 'dawn' ? 'dawn' : light === 'day' ? 'daytime' : 'night') + '.' : 'Lighting set to ' + (light === 'day' ? 'daylight' : 'night') + '.';
     el('map-light-status').textContent = label + ' The colours are illustrative, not a weather report.';
   }
@@ -75,7 +88,8 @@
     el('map-event-location').textContent = ids.length ? 'On the map: ' + ids.map(id => byId.get(id).name).join(' · ') : 'This event has no location on this map.';
     el('map-prev-event').disabled = current === 0; el('map-next-event').disabled = current === events.length - 1;
     document.querySelectorAll('.map-pin').forEach(pin => pin.dataset.scene = String(ids.includes(pin.dataset.id)));
-    showPlace(ids.length ? byId.get(ids[0]) : null);
+    showPlace(ids.length ? byId.get(ids[0]) : null, false);
+    town3d?.focus(ids, motionEnabled);
     updateLight();
   }
   slider.addEventListener('input', () => {pause(); showEvent(Number(slider.value) - 1)});
@@ -89,6 +103,7 @@
   el('map-delay').addEventListener('change', schedule);
   el('map-light').addEventListener('change', updateLight);
   el('map-open-event').addEventListener('click', () => openTimeline(events[current].title));
+  document.addEventListener('chronicle-timeline-select', event => { pause(); showEvent(event.detail.index); });
   document.addEventListener('visibilitychange', () => {if (document.hidden) pause()});
   showEvent(0);
 
